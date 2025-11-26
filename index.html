@@ -102,195 +102,196 @@
             <div id="successMessage" class="success-message"></div>
             <div id="infoMessage" class="info-message"></div>
 
-            <div class="form-group">
-                <label>Full Name <span class="required">*</span></label>
-                <input type="text" id="name" placeholder="Enter your full name">
-                <div id="nameError" class="error-message"></div>
-            </div>
+            <form id="registrationForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" placeholder="Enter your full name" autocomplete="off">
+                    <div id="nameError" class="error-message"></div>
+                </div>
 
-            <div class="form-group">
-                <label>Mobile Number <span class="required">*</span></label>
-                <input type="tel" id="mobile" placeholder="Enter 10-digit mobile number">
-                <div id="mobileError" class="error-message"></div>
-            </div>
+                <div class="form-group">
+                    <label for="mobile">Mobile Number <span class="required">*</span></label>
+                    <input type="tel" id="mobile" placeholder="Enter 10-digit mobile number" autocomplete="off">
+                    <div id="mobileError" class="error-message"></div>
+                </div>
 
-            <div class="form-group">
-                <label>Email ID <span class="required">*</span></label>
-                <input type="email" id="email" placeholder="your.email@example.com">
-                <div id="emailError" class="error-message"></div>
-            </div>
+                <div class="form-group">
+                    <label for="email">Email ID <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="your.email@example.com" autocomplete="off">
+                    <div id="emailError" class="error-message"></div>
+                </div>
 
-            <div class="form-group">
-                <label>Select Degree <span class="required">*</span></label>
-                <select id="degree">
-                    <option value="">-- Choose Degree --</option>
-                    <option value="BE/B.Tech">BE/B.Tech</option>
-                    <option value="Arts">Arts</option>
-                </select>
-                <div id="degreeError" class="error-message"></div>
-            </div>
+                <div class="form-group">
+                    <label for="degree">Select Degree <span class="required">*</span></label>
+                    <select id="degree">
+                        <option value="">-- Choose Degree --</option>
+                        <option value="BE/B.Tech">BE/B.Tech</option>
+                        <option value="Arts">Arts</option>
+                    </select>
+                    <div id="degreeError" class="error-message"></div>
+                </div>
 
-            <div class="form-group">
-                <label>Select Specialization <span class="required">*</span></label>
-                <select id="specialization" disabled>
-                    <option value="">-- First Select Degree --</option>
-                </select>
-                <div id="specializationError" class="error-message"></div>
-            </div>
+                <div class="form-group">
+                    <label for="specialization">Select Specialization <span class="required">*</span></label>
+                    <select id="specialization" disabled>
+                        <option value="">-- First Select Degree --</option>
+                    </select>
+                    <div id="specializationError" class="error-message"></div>
+                </div>
 
-            <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
-                📧 Submit & Send PDF via Email
-            </button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    📧 Submit & Send PDF via Email
+                </button>
+            </form>
         </div>
     </div>
 
 <script>
 const API_URL = "https://backend-pe90.onrender.com";
-    const specializationOptions = {
-        "BE/B.Tech": [
-            "Computer Science Engineering",
-            "Mechanical Engineering",
-            "Electrical Engineering",
-            "Civil Engineering",
-            "Electronics and Communication",
-            "Information Technology",
-            "Chemical Engineering"
-        ],
-        "Arts": [
-            "English Literature",
-            "History",
-            "Political Science",
-            "Psychology",
-            "Sociology",
-            "Economics",
-            "Fine Arts"
-        ]
-    };
+const specializationOptions = {
+    "BE/B.Tech": [
+        "Computer Science Engineering",
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "Civil Engineering",
+        "Electronics and Communication",
+        "Information Technology",
+        "Chemical Engineering"
+    ],
+    "Arts": [
+        "English Literature",
+        "History",
+        "Political Science",
+        "Psychology",
+        "Sociology",
+        "Economics",
+        "Fine Arts"
+    ]
+};
 
-    document.getElementById("degree").addEventListener("change", function () {
-        const degree = this.value;
-        const specializationSelect = document.getElementById("specialization");
+document.getElementById("degree").addEventListener("change", function () {
+    const degree = this.value;
+    const specializationSelect = document.getElementById("specialization");
 
-        if (degree) {
-            specializationSelect.disabled = false;
-            specializationSelect.innerHTML = '<option value="">-- Choose Specialization --</option>';
+    if (degree && specializationOptions[degree]) {
+        specializationSelect.disabled = false;
+        specializationSelect.innerHTML = '<option value="">-- Choose Specialization --</option>';
 
-            specializationOptions[degree].forEach(spec => {
-                let opt = document.createElement("option");
-                opt.value = opt.textContent = spec;
-                specializationSelect.appendChild(opt);
-            });
-        } else {
-            specializationSelect.disabled = true;
-            specializationSelect.innerHTML = '<option value="">-- First Select Degree --</option>';
-        }
-    });
-
-    function showMessage(id, msg) {
-        const box = document.getElementById(id);
-        box.innerHTML = msg;
-        box.style.display = "block";
-        setTimeout(() => box.style.display = "none", 5000);
-    }
-
-    function validateForm() {
-        let valid = true;
-
-        document.querySelectorAll(".error-message").forEach(e => e.textContent = "");
-        document.querySelectorAll("input, select").forEach(e => e.classList.remove("error"));
-
-        const name = document.getElementById("name").value.trim();
-        if (!name) { document.getElementById("nameError").textContent = "Name required"; valid = false; }
-
-        const mobile = document.getElementById("mobile").value.trim();
-        if (!/^\d{10}$/.test(mobile)) {
-            document.getElementById("mobileError").textContent = "Invalid 10-digit number";
-            valid = false;
-        }
-
-        const email = document.getElementById("email").value.trim();
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            document.getElementById("emailError").textContent = "Invalid email";
-            valid = false;
-        }
-
-        if (!document.getElementById("degree").value) valid = false;
-        if (!document.getElementById("specialization").value) valid = false;
-
-        return valid;
-    }
-
-    async function submitForm() {
-        if (!validateForm()) return;
-
-        const btn = document.getElementById("submitBtn");
-        btn.innerHTML = "Sending...";
-        btn.disabled = true;
-
-        const data = {
-            name: document.getElementById("name").value.trim(),
-            mobile: document.getElementById("mobile").value.trim(),
-            email: document.getElementById("email").value.trim(),
-            degree: document.getElementById("degree").value,
-            specialization: document.getElementById("specialization").value,
-            timestamp: new Date().toLocaleString()
-        };
-
-       try {
-    const res = await fetch(`${API_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-
-    const result = await res.json().catch(() => ({})); // avoid JSON error
-
-    if (res.ok) {
-        showMessage(
-            "successMessage", 
-            `Registration successful! Email sent to <b>${data.email}</b>`
-        );
+        specializationOptions[degree].forEach(spec => {
+            let opt = document.createElement("option");
+            opt.value = opt.textContent = spec;
+            specializationSelect.appendChild(opt);
+        });
     } else {
-        showMessage(
-            "infoMessage", 
-            result.message || "Email failed to send from server."
-        );
+        specializationSelect.disabled = true;
+        specializationSelect.innerHTML = '<option value="">-- First Select Degree --</option>';
     }
+});
 
-} catch (error) {
-    showMessage(
-        "infoMessage", 
-        "Server offline or unreachable. Could not send email."
-    );
+function showMessage(id, msg) {
+    const box = document.getElementById(id);
+    box.innerHTML = msg;
+    box.style.display = "block";
+    setTimeout(() => box.style.display = "none", 5000);
 }
 
+function validateForm() {
+    let valid = true;
 
-        btn.disabled = false;
-        btn.innerHTML = "📧 Submit & Send PDF via Email";
+    document.querySelectorAll(".error-message").forEach(e => e.textContent = "");
+    document.querySelectorAll("input, select").forEach(e => e.classList.remove("error"));
 
-        document.getElementById("name").value = "";
-        document.getElementById("mobile").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("degree").value = "";
-        document.getElementById("specialization").value = "";
-        document.getElementById("specialization").disabled = true;
+    const name = document.getElementById("name").value.trim();
+    if (!name) {
+        document.getElementById("nameError").textContent = "Name required";
+        document.getElementById("name").classList.add("error");
+        valid = false;
     }
+
+    const mobile = document.getElementById("mobile").value.trim();
+    if (!/^\d{10}$/.test(mobile)) {
+        document.getElementById("mobileError").textContent = "Invalid 10-digit number";
+        document.getElementById("mobile").classList.add("error");
+        valid = false;
+    }
+
+    const email = document.getElementById("email").value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById("emailError").textContent = "Invalid email";
+        document.getElementById("email").classList.add("error");
+        valid = false;
+    }
+
+    if (!document.getElementById("degree").value) {
+        document.getElementById("degreeError").textContent = "Degree required";
+        document.getElementById("degree").classList.add("error");
+        valid = false;
+    }
+    if (!document.getElementById("specialization").value) {
+        document.getElementById("specializationError").textContent = "Specialization required";
+        document.getElementById("specialization").classList.add("error");
+        valid = false;
+    }
+
+    return valid;
+}
+
+async function submitForm(event) {
+    event.preventDefault();
+
+    if (!validateForm()) return;
+
+    const btn = document.getElementById("submitBtn");
+    btn.innerHTML = "Sending...";
+    btn.disabled = true;
+
+    const data = {
+        name: document.getElementById("name").value.trim(),
+        mobile: document.getElementById("mobile").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        degree: document.getElementById("degree").value,
+        specialization: document.getElementById("specialization").value,
+        timestamp: new Date().toLocaleString()
+    };
+
+    try {
+        const res = await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json().catch(() => ({})); // avoid JSON error
+
+        if (res.ok) {
+            showMessage(
+                "successMessage", 
+                `Registration successful! Email sent to <b>${data.email}</b>`
+            );
+        } else {
+            showMessage(
+                "infoMessage", 
+                result.message || "Email failed to send from server."
+            );
+        }
+
+    } catch (error) {
+        showMessage(
+            "infoMessage", 
+            "Server offline or unreachable. Could not send email."
+        );
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = "📧 Submit & Send PDF via Email";
+
+    document.getElementById("registrationForm").reset();
+    document.getElementById("specialization").disabled = true;
+}
+
+// Listen for form submit event.
+document.getElementById("registrationForm").addEventListener("submit", submitForm);
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
