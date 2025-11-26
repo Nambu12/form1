@@ -145,7 +145,7 @@
     </div>
 
 <script>
-const API_URL = "https://backend-x16q.onrender.com";
+const API_URL = "https://backend-production-e456.up.railway.app";
     const specializationOptions = {
         "BE/B.Tech": [
             "Computer Science Engineering",
@@ -237,21 +237,21 @@ const API_URL = "https://backend-x16q.onrender.com";
         };
 
         try {
-            const res = await fetch(`https://backend-x16q.onrender.com/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
+    const res = await fetch(`${API_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
 
-            if (res.ok) {
-                showMessage("successMessage", `Registration successful! Email sent to <b>${data.email}</b>`);
-            } else {
-                showMessage("infoMessage", "Email failed to send.");
-            }
+    if (res.ok) {
+        showMessage("successMessage", `Registration successful! Email sent to <b>${data.email}</b>`);
+    } else {
+        showMessage("infoMessage", "Email failed to send.");
+    }
 
-        } catch (error) {
-            showMessage("infoMessage", "Server offline. Could not send email.");
-        }
+} catch (error) {
+    showMessage("infoMessage", "Server offline. Could not send email.");
+}
 
         btn.disabled = false;
         btn.innerHTML = "📧 Submit & Send PDF via Email";
@@ -267,6 +267,7 @@ const API_URL = "https://backend-x16q.onrender.com";
 
 </body>
 </html>
+
 
 
 
