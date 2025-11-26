@@ -255,7 +255,7 @@ async function submitForm(event) {
     };
 
     try {
-        const res = await fetch(`${API_URL}/register`, {
+        const res = await fetch(`${API_URL}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -295,3 +295,4 @@ document.getElementById("registrationForm").addEventListener("submit", submitFor
 
 </body>
 </html>
+
