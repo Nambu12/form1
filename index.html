@@ -236,22 +236,34 @@ const API_URL = "https://backend-pe90.onrender.com";
             timestamp: new Date().toLocaleString()
         };
 
-        try {
+       try {
     const res = await fetch(`${API_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     });
 
+    const result = await res.json().catch(() => ({})); // avoid JSON error
+
     if (res.ok) {
-        showMessage("successMessage", `Registration successful! Email sent to <b>${data.email}</b>`);
+        showMessage(
+            "successMessage", 
+            `Registration successful! Email sent to <b>${data.email}</b>`
+        );
     } else {
-        showMessage("infoMessage", "Email failed to send.");
+        showMessage(
+            "infoMessage", 
+            result.message || "Email failed to send from server."
+        );
     }
 
 } catch (error) {
-    showMessage("infoMessage", "Server offline. Could not send email.");
+    showMessage(
+        "infoMessage", 
+        "Server offline or unreachable. Could not send email."
+    );
 }
+
 
         btn.disabled = false;
         btn.innerHTML = "📧 Submit & Send PDF via Email";
@@ -267,6 +279,7 @@ const API_URL = "https://backend-pe90.onrender.com";
 
 </body>
 </html>
+
 
 
 
